@@ -1,22 +1,23 @@
 import os
 import json
-from kafka import KafkaProducer
+import avro.schema
+# from kafka import KafkaProducer
 from confluent_kafka import Producer, Consumer, KafkaError
-from confluent_kafka.serialization import StringSerializer, SerializerError, AvroSerializer
+from confluent_kafka.serialization import StringSerializer, AvroSerializer
 from confluent_kafka.schema_registry import SchemaRegistryClient
 
 
 KAFKA_ADDRESS = os.getenv('KAFKA_ADDRESS')
 
 class KafkaProducer():
-    def __init__(self, kafka_addr:str, topic:str, key:str=None, avro_schema=None, generator=None):
+    def __init__(self, kafka_addr:str, topic:str, avro_schema_json=None, generator=None):
         self.kafka_addr = kafka_addr
         self.topic = topic
-        self.key = key
-        self.avro_schema = avro_schema
+        # self.key = key
         self.generator = generator
         # Cấu hình Schema Registry
-        self.schema_registry_conf = {'url': 'http://160.191.244.13:8081'} # Địa chỉ Schema Registry
+        self.avro_schema = avro.schema.parse(json.dumps(avro_schema_json))
+        self.schema_registry_conf = {'url': f'{KAFKA_ADDRESS}:8081'} # Địa chỉ Schema Registry
         self.schema_registry_client = SchemaRegistryClient(self.schema_registry_conf)
         # Cấu hình Producer
         self.conf = {
@@ -33,7 +34,7 @@ class KafkaProducer():
         producer = Producer(self.conf)
         # send data to topic
         for data in self.generator():
-            producer.produce(self.topic, key=self.key, value=data, key_serializer=key_serializer, value_serializer=value_serializer)
+            producer.produce(self.topic, key=data['key'], value=data['value'], key_serializer=key_serializer, value_serializer=value_serializer)
 
         producer.close()
     

@@ -2,3 +2,5 @@ kafka-python==2.0.2
 dbt-query
 python-dotenv
 polars
+avro
+confluent-kafka[avro]
