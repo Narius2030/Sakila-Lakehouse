@@ -4,10 +4,9 @@ sys.path.append("./kafka")
 import os
 import csv
 import json
-import polars as pl
 from pathlib import Path
 from dotenv import load_dotenv
-from KafkaComponent import KafkaConsumer
+from KafkaComponent import Cons
 env_path = Path(".") / ".env"
 load_dotenv(dotenv_path=env_path)
 
@@ -30,7 +29,7 @@ def write_json_logs(message):
         writer = csv.writer(file)
         writer.writerow(row)
     
-    
+
 if __name__ == '__main__':
-    cons = KafkaConsumer(KAFKA_ADDRESS, 'yellow_taxi_ride.json', 'taxi-rides', write_json_logs)
+    cons = Cons(KAFKA_ADDRESS, 'yellow_taxi_ride_02.json', 'taxi-rides', write_json_logs)
     cons.run()

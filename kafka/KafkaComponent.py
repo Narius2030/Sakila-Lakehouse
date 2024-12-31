@@ -1,45 +1,30 @@
 import os
-import json
-import avro.schema
-# from kafka import KafkaProducer
-from confluent_kafka import Producer, Consumer, KafkaError
-from confluent_kafka.serialization import StringSerializer, AvroSerializer
-from confluent_kafka.schema_registry import SchemaRegistryClient
+from json import dumps
+from kafka import KafkaProducer
+from confluent_kafka import Consumer
+# from confluent_kafka.serialization import StringSerializer
 
 
-KAFKA_ADDRESS = os.getenv('KAFKA_ADDRESS')
-
-class KafkaProducer():
-    def __init__(self, kafka_addr:str, topic:str, avro_schema_json=None, generator=None):
+class Prod():
+    def __init__(self, kafka_addr:str, topic:str, generator=None):
         self.kafka_addr = kafka_addr
         self.topic = topic
         # self.key = key
         self.generator = generator
-        # Cấu hình Schema Registry
-        self.avro_schema = avro.schema.parse(json.dumps(avro_schema_json))
-        self.schema_registry_conf = {'url': f'{KAFKA_ADDRESS}:8081'} # Địa chỉ Schema Registry
-        self.schema_registry_client = SchemaRegistryClient(self.schema_registry_conf)
-        # Cấu hình Producer
-        self.conf = {
-            'bootstrap.servers': f'{self.kafka_addr}:9092',  # Địa chỉ Kafka broker
-            'client.id': 'producer-01',
-            'acks': '1' # xác nhận ghi message từ leader partition
-        }
-        
+    
     def run(self):
-        # Khởi tạo AvroSerializer
-        key_serializer = StringSerializer('utf_8')
-        value_serializer = AvroSerializer(self.schema_registry_client, self.avro_schema)
-        
-        producer = Producer(self.conf)
+        producer = KafkaProducer(bootstrap_servers=[f'{self.kafka_addr}:9092'],
+                                 key_serializer=lambda x: dumps(x).encode('utf-8'),
+                                 value_serializer=lambda x: dumps(x, default=str).encode('utf-8'))
         # send data to topic
         for data in self.generator():
-            producer.produce(self.topic, key=data['key'], value=data['value'], key_serializer=key_serializer, value_serializer=value_serializer)
-
+            print(data)
+            producer.send(self.topic, key=data['key'], value=data['value'])
+            print("processing")
         producer.close()
     
 
-class KafkaConsumer():
+class Cons():
     def __init__(self, kafka_addr:str, topic:str, group_id:str=None, function=None):
         self.kafka_addr = kafka_addr
         self.topic = topic
