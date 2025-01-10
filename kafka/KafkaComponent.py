@@ -18,7 +18,6 @@ class Prod():
                                  value_serializer=lambda x: dumps(x, default=str).encode('utf-8'))
         # send data to topic
         for data in self.generator():
-            print(data)
             producer.send(self.topic, key=data['key'], value=data['value'])
             print("processing")
         producer.close()
