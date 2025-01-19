@@ -31,5 +31,5 @@ def write_json_logs(message):
     
 
 if __name__ == '__main__':
-    cons = Cons(KAFKA_ADDRESS, 'yellow_taxi_ride.json', 'taxi-rides', write_json_logs)
+    cons = Cons(KAFKA_ADDRESS, 'test', 'taxi-rides', write_json_logs)
     cons.run()
