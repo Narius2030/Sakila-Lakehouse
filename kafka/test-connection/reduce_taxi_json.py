@@ -18,18 +18,19 @@ def write_json_logs(message):
     row = []
     message = message.value().decode('utf-8')
     message = json.loads(message)
-    for _, data in message.items():
-        try:
-            row.append(data)
-        except Exception as exc:
-            raise Exception(str(exc))
+    for key, data in message.items():
+        if key == "after":
+            print(key, data, type(data))
+            try:
+                row.append(data)
+            except Exception as exc:
+                raise Exception(str(exc))
     
-    print(row)
-    with open("./kafka/test-connection/data/rides_df.csv", "a", encoding="utf-8", newline='\n') as file:
+    with open("./kafka/test-connection/data/sakila_payments.csv", "a", encoding="utf-8", newline='\n') as file:
         writer = csv.writer(file)
         writer.writerow(row)
     
 
 if __name__ == '__main__':
-    cons = Cons(KAFKA_ADDRESS, 'test', 'taxi-rides', write_json_logs)
+    cons = Cons(KAFKA_ADDRESS, 'dbserver1.public.payment', 'sakila_payment', write_json_logs)
     cons.run()

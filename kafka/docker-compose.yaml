@@ -77,7 +77,7 @@ services:
       PORT: 9021
 
   debezium:
-    build: ./conf
+    image: debezium/connect:3.0.0.Final
     hostname: connect
     container_name: connect
     depends_on:
@@ -92,9 +92,3 @@ services:
       OFFSET_STORAGE_TOPIC: debezium-offset
       STATUS_STORAGE_TOPIC: debezium-status
       DEBEZIUM_CONFIG_CONNECTOR_CLASS: io.debezium.connector.postgresql.PostgresConnector
-      DEBEZIUM_CONFIG_DATABASE_HOSTNAME: 116.118.50.253
-      DEBEZIUM_CONFIG_DATABASE_PORT: 5433
-      DEBEZIUM_CONFIG_DATABASE_PASSWORD: admin
-      DEBEZIUM_CONFIG_DATABASE_USER: admin
-      DEBEZIUM_CONFIG_DATABASE_SERVER_NAME: postgres
-      DEBEZIUM_CONFIG_DATABASE_DBNAME: sakila
