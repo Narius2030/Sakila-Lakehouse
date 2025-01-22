@@ -75,3 +75,26 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+
+  debezium:
+    build: ./conf
+    hostname: connect
+    container_name: connect
+    depends_on:
+      - broker
+    ports:
+      - 8083:8083
+    links:
+      - broker
+    environment:
+      BOOTSTRAP_SERVERS: broker:29092
+      CONFIG_STORAGE_TOPIC: debezium-config
+      OFFSET_STORAGE_TOPIC: debezium-offset
+      STATUS_STORAGE_TOPIC: debezium-status
+      DEBEZIUM_CONFIG_CONNECTOR_CLASS: io.debezium.connector.postgresql.PostgresConnector
+      DEBEZIUM_CONFIG_DATABASE_HOSTNAME: 116.118.50.253
+      DEBEZIUM_CONFIG_DATABASE_PORT: 5433
+      DEBEZIUM_CONFIG_DATABASE_PASSWORD: admin
+      DEBEZIUM_CONFIG_DATABASE_USER: admin
+      DEBEZIUM_CONFIG_DATABASE_SERVER_NAME: postgres
+      DEBEZIUM_CONFIG_DATABASE_DBNAME: sakila
