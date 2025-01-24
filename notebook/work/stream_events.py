@@ -1,7 +1,7 @@
 import sys
 sys.path.append("./work")
-from streaming import SparkStreaming
-from streaming_functions import process_stream
+from operators.streaming import SparkStreaming
+from utils.streaming_functions import process_stream
 
 KAFKA_ADDRESS="160.191.244.13"
 KAFKA_PORT="9092"

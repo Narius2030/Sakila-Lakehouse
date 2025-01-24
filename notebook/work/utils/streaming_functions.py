@@ -1,3 +1,6 @@
+import sys
+sys.path.append("./work")
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from schema import schema_taxi
