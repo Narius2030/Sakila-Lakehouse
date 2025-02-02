@@ -1,7 +1,7 @@
 import sys
-sys.path.append("./work")
+sys.path.append("./work/streamify")
 
-from utils.configuration import get_settings
+from utils.config import get_settings
 from operators.streaming import SparkStreaming
 from utils.streaming_functions import process_stream
 

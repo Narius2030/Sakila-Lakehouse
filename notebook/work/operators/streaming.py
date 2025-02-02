@@ -1,28 +1,20 @@
 from pyspark.sql import SparkSession
-from threading import Lock
-
 
 class SparkStreaming():
-    _instance = None
-    _lock = Lock()  # Đảm bảo thread-safe nếu ứng dụng có nhiều luồng
-    
-    @classmethod
-    def get_instance(cls, app_name:str, executor_memory:str="1g", partitions:str="200"):
-        with cls._lock:  # Đảm bảo chỉ một luồng có thể tạo SparkSession tại một thời điểm
-            if cls._instance is None:
-                cls._instance = SparkSession.builder \
-                                .appName(app_name) \
-                                .master('spark://spark-master:7077') \
-                                .config("spark.executor.memory", executor_memory) \
-                                .config("spark.sql.shuffle.partitions", partitions) \
-                                .config("hive.metastore.uris", "thrift://hive-metastore:9083") \
-                                .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider') \
-                                .config('spark.sql.warehouse.dir', f's3a://lakehouse/') \
-                                .config('spark.jars.packages', 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.0') \
-                                .enableHiveSupport() \
-                                .getOrCreate()
-                                            
-            return cls._instance
+    @staticmethod
+    def get_instance(app_name:str, executor_memory:str="1g", partitions:str="200"):
+        spark = (SparkSession.builder
+                    .appName(app_name)
+                    .master('spark://spark-master:7077')
+                    .config("spark.executor.memory", executor_memory)
+                    .config("spark.sql.shuffle.partitions", partitions)
+                    .config("hive.metastore.uris", "thrift://hive-metastore:9083")
+                    .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
+                    .config('spark.sql.warehouse.dir', f's3a://lakehouse/')
+                    .config('spark.jars.packages', 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.0,org.mongodb.spark:mongo-spark-connector:10.0.2')
+                    .enableHiveSupport()
+                    .getOrCreate())                
+        return spark
     
     @staticmethod
     def create_kafka_read_stream(spark, kafka_address, kafka_port, topic, starting_offset="earliest"):
@@ -53,7 +45,7 @@ class SparkStreaming():
         return read_stream
     
     @staticmethod
-    def create_file_write_stream(stream, storage_path, checkpoint_path, trigger="1 seconds", output_mode="complete", file_format="delta"):
+    def create_file_write_stream(stream, checkpoint_path, storage_path=None, trigger="1 seconds", output_mode="complete", file_format="delta"):
         """
         Write the stream back to a file store
 
@@ -61,7 +53,7 @@ class SparkStreaming():
             stream : DataStreamReader
                 The data stream reader for your stream
             file_format : str
-                parquet, csv, orc etc
+                mongodb, delta, parquet, csv etc
             storage_path : str
                 The file output path
             checkpoint_path : str
@@ -74,12 +66,8 @@ class SparkStreaming():
 
         write_stream = (stream.writeStream
                             .format(file_format)
-                            .partitionBy("pickup_location")
-                            .option("path", storage_path)
                             .option("checkpointLocation", checkpoint_path)
                             .trigger(processingTime=trigger)
                             .outputMode(output_mode))
 
         return write_stream
-    
-    

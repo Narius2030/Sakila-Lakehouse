@@ -2,7 +2,7 @@ import sys
 sys.path.append('./notebook/work')
 
 from utils.support_query import QueryTemplate
-from utils.configuration import Settings
+from utils.config import Settings
 from contextlib import closing
 import sqlalchemy as sql
 import time

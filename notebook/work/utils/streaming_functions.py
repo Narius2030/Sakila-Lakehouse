@@ -1,5 +1,5 @@
 import sys
-sys.path.append("./work")
+sys.path.append("./work/streamify")
 
 from pyspark.sql.functions import *
 from utils.schema import schema_taxi
