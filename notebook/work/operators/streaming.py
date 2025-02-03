@@ -10,7 +10,8 @@ class SparkStreaming():
                     .config("spark.sql.shuffle.partitions", partitions)
                     .config("hive.metastore.uris", "thrift://hive-metastore:9083")
                     .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
-                    .config('spark.sql.warehouse.dir', f's3a://lakehouse/')
+                    .config('spark.sql.warehouse.dir', 's3a://lakehouse/')
+                    .config('hive.metastore.warehouse.dir', 's3a://lakehouse/')
                     .config('spark.jars.packages', 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.0,org.mongodb.spark:mongo-spark-connector:10.0.2')
                     .enableHiveSupport()
                     .getOrCreate())                
@@ -45,7 +46,7 @@ class SparkStreaming():
         return read_stream
     
     @staticmethod
-    def create_file_write_stream(stream, checkpoint_path, storage_path=None, trigger="1 seconds", output_mode="complete", file_format="delta"):
+    def create_file_write_stream(stream, checkpoint_path, storage_path=None, trigger="5 seconds", output_mode="append", file_format="delta", partitions=None):
         """
         Write the stream back to a file store
 
@@ -64,9 +65,12 @@ class SparkStreaming():
                 append, complete, update
         """
 
-        write_stream = (stream.writeStream
+        write_stream = (stream
+                            .writeStream
                             .format(file_format)
+                            .partitionBy(partitions)
                             .option("checkpointLocation", checkpoint_path)
+                            .option("path", storage_path)
                             .trigger(processingTime=trigger)
                             .outputMode(output_mode))
 
