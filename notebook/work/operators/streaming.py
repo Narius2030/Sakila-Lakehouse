@@ -9,6 +9,7 @@ class SparkStreaming():
                     .config("spark.executor.memory", executor_memory)
                     .config("spark.sql.shuffle.partitions", partitions)
                     .config("hive.metastore.uris", "thrift://hive-metastore:9083")
+                    .config("hive.exec.dynamic.partition.mode", "nonstrict")
                     .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
                     .config('spark.sql.warehouse.dir', 's3a://lakehouse/')
                     .config('hive.metastore.warehouse.dir', 's3a://lakehouse/')
