@@ -10,6 +10,11 @@ class SparkStreaming():
                     .config("spark.sql.shuffle.partitions", partitions)
                     .config("hive.metastore.uris", "thrift://hive-metastore:9083")
                     .config("hive.exec.dynamic.partition.mode", "nonstrict")
+                    .config("spark.streaming.backpressure.enabled", "true")
+                    .config("spark.hadoop.fs.s3a.path.style.access", "true")
+                    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+                    .config("spark.hadoop.fs.s3a.connection.ssl.enabled", "false")
+                    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
                     .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
                     .config('spark.sql.warehouse.dir', 's3a://lakehouse/')
                     .config('hive.metastore.warehouse.dir', 's3a://lakehouse/')
@@ -47,7 +52,7 @@ class SparkStreaming():
         return read_stream
     
     @staticmethod
-    def create_file_write_stream(stream, checkpoint_path, storage_path=None, trigger="5 seconds", output_mode="append", file_format="delta", partitions=None):
+    def create_file_write_stream(stream, checkpoint_path, storage_path=None, trigger="10 seconds", output_mode="append", file_format="delta", partitions=None):
         """
         Write the stream back to a file store
 
@@ -76,3 +81,17 @@ class SparkStreaming():
                             .outputMode(output_mode))
 
         return write_stream
+    
+    @staticmethod
+    def register_delta_table(spark, database, table_name, columns:list, partition:dict):
+        column_str = ',\n'.join([f"{col[0]} {col[1]}" for col in columns])
+        spark.sql(f"""
+            CREATE TABLE IF NOT EXISTS {database}.{table_name} (
+                {column_str}
+            )
+            USING DELTA
+            PARTITIONED BY({partition['name']} {partition['type']})
+            LOCATION 's3a://lakehouse/{database}.db/{table_name}'
+        """)
+        # Describe schema
+        print(spark.sql(f"DESCRIBED EXTENDED {database}.{table_name}").show())

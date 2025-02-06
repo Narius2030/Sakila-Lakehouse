@@ -4,14 +4,14 @@ sys.path.append("./work/streamify")
 from utils.config import get_settings
 from operators.streaming import SparkStreaming
 from utils.streaming_functions import rental_process_stream, payment_process_stream
-from utils.schema import schema_rental, schema_payment
+from utils.schema import *
 
 settings = get_settings()
 PAYMENT_TOPIC = "dbserver1.public.payment"
 RENTAL_TOPIC = "dbserver1.public.rental"
 
-RENTAL_STORAGE_PATH = "s3a://lakehouse/streaming/streamify/rental"
-PAYMENT_STORAGE_PATH = "s3a://lakehouse/streaming/streamify/payment"
+RENTAL_STORAGE_PATH = "s3a://lakehouse/streamify.db/rental"
+PAYMENT_STORAGE_PATH = "s3a://lakehouse/streamify.db/payment"
 
 RENTAL_CHECKPOINT_PATH = "s3a://lakehouse/streaming/streamify/checkpoints/checkpoint_rental"
 PAYMENT_CHECKPOINT_PATH = "s3a://lakehouse/streaming/streamify/checkpoints/checkpoint_payment"

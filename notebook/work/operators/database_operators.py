@@ -85,7 +85,7 @@ class SQLOperators:
                     cur.execute(sql.text(query), partitioned_data)
                     cur.commit()
                     print(f"merged or updated {num_records} records")
-                    time.sleep(5)
+                    time.sleep(1)
         except Exception as ex:
             raise Exception(f"====> Can't execute {query} - {str(ex)}")
         
