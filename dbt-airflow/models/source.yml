@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: delta-streamify   # Tên nguồn dữ liệu
+    description: "Dữ liệu raw được lưu trong PostgreSQL"
+    database: delta
+    schema: streamify
+    tables:
+      - name: payment  # Tên bảng trong PostgreSQL
+        description: "Bảng chứa sự kiện thanh toán"
+        columns:
+          - name: payment_id
+            description: "ID của mỗi giao dịch"
+            tests:
+              - not_null
