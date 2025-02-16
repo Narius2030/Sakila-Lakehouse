@@ -33,4 +33,5 @@ models:
   streamify:
     # Config indicated by + and applies to all files under models/example/
     example:
-      +materialized: table  
+      +materialized: incremental
+      +views_enabled: false  

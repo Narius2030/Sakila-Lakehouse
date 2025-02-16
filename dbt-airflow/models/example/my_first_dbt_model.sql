@@ -9,7 +9,8 @@
 
 
 {{ config(
-    unique_key='id'
+    unique_key='id',
+    incremental_strategy='append'
 ) }}
 
 

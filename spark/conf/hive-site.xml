@@ -35,6 +35,16 @@
         <name>fs.s3a.connection.ssl.enabled</name>
         <value>false</value>
     </property>
+    <property>
+        <name>hive.metastore.disallow.incompatible.col.type.changes</name>
+        <value>false</value>
+        <description>Allow renaming and other operations on managed tables.</description>
+    </property>
+    <property>
+        <name>hive.metastore.rename.table</name>
+        <value>true</value>
+        <description>Allow renaming of tables.</description>
+    </property>
     <!-- <property>
         <name>hive.metastore.warehouse.dir</name>
         <value>s3a://lakehouse/</value>
