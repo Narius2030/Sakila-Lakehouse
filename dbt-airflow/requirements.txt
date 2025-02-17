@@ -1,0 +1,5 @@
+dbt-core
+dbt-trino
+pydantic
+python-dotenv
+pydantic-settings

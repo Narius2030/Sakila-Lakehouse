@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  # Airflow setup
+  airflow:
+    image: streamify/airflow:2.9.1
+    volumes:
+      - ./core:/opt/airflow
+    ports:
+      - "8081:8080"
+    command: airflow standalone
+    networks:
+      - data_network
+
+networks:
+  data_network:
+    driver: bridge
+    name: data_network
