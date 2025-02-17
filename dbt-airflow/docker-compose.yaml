@@ -3,7 +3,10 @@ version: "3.9"
 services:
   # Airflow setup
   airflow:
-    image: streamify/airflow:2.9.1
+    container_name: streamify-airflow
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
     volumes:
       - ./core:/opt/airflow
     ports:

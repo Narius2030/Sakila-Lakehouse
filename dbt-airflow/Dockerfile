@@ -4,8 +4,7 @@ FROM apache/airflow:2.9.2-python3.11
 
 USER root
 RUN apt update && \
-    apt-get -y install libpq-dev gcc && \
-    apt-get update && apt-get install ffmpeg libsm6 libxext6  -y && \
+    apt-get -y install git && \
     apt-get clean;
 
 USER airflow
