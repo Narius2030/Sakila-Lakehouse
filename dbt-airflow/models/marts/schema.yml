@@ -2,19 +2,28 @@
 version: 2
 
 models:
-  - name: my_first_dbt_model
+  - name: dim_customer_detail
     description: "A starter dbt model"
     columns:
-      - name: id
+      - name: customer_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+  
+  - name: dim_rental_detail
+    description: "A starter dbt model"
+    columns:
+      - name: rental_id
         description: "The primary key for this table"
         data_tests:
           - unique
           - not_null
 
-  - name: my_second_dbt_model
+  - name: fact_customer_segment
     description: "A starter dbt model"
     columns:
-      - name: id
+      - name: rental_id
         description: "The primary key for this table"
         data_tests:
           - unique

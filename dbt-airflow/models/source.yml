@@ -10,6 +10,86 @@ sources:
         description: "Bảng chứa sự kiện thanh toán"
         columns:
           - name: payment_id
-            description: "ID của mỗi giao dịch"
+            tests:
+              - dbt_expectations.expect_column_values_to_be_null:
+                  row_condition: "payment_id is not null"
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: integer
+          
+          - name: amount
             tests:
               - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: float
+
+          - name: payment_date
+            tests:
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: timestamp
+
+      - name: rental  # Tên bảng trong PostgreSQL
+        columns:
+          - name: rental_id
+            tests:
+              - dbt_expectations.expect_column_values_to_be_null:
+                  row_condition: "rental_id is not null"
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: integer
+
+          - name: return_date
+            tests:
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: timestamp
+          
+      - name: customer  # Tên bảng trong PostgreSQL
+        description: "Bảng chứa thông tin khách hàng"
+        columns:
+          - name: customer_id
+            tests:
+              - dbt_expectations.expect_column_values_to_be_null:
+                  row_condition: "customer_id is not null"
+
+      - name: country  # Tên bảng trong PostgreSQL
+        description: "Bảng chứa thông tin quốc gia"
+        columns:
+          - name: country_id
+            tests:
+              - dbt_expectations.expect_column_values_to_be_null:
+                  row_condition: "country_id is not null"
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: integer
+          
+          - name: country
+            tests:
+              - dbt_expectations.expect_column_values_to_be_null:
+                  row_condition: "country is not null"
+
+      - name: city  # Tên bảng trong PostgreSQL
+        description: "Bảng chứa thông tin thành phố của mỗi quốc gia"
+        columns:
+          - name: city_id
+            tests:
+              - dbt_expectations.expect_column_values_to_be_null:
+                  row_condition: "city_id is not null"
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: integer
+
+          - name: city
+            tests:
+              - dbt_expectations.expect_column_values_to_be_null:
+                  row_condition: "country is not null"
+
+      - name: address  # Tên bảng trong PostgreSQL
+        description: "Bảng chứa thông tin thành phố của mỗi quốc gia"
+        columns:
+          - name: address_id
+            tests:
+              - dbt_expectations.expect_column_values_to_be_null:
+                  row_condition: "address_id is not null"
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: integer
+
+          - name: address
+            tests:
+              - dbt_expectations.expect_column_values_to_be_null:
+                  row_condition: "address is not null"
