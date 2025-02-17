@@ -1,16 +1,17 @@
 {{ config(
-    depends_on=['dim_customer_detail', 'dim_rental_detail']
+    depends_on=['dim_datetime', 'dim_customer_detail', 'dim_rental_detail']
 ) }}
 
 
 WITH fact_customer_segment AS (
     SELECT
-        c.customer_id, 
+        dt.date_key,
+        c.customer_key, 
+        r.rental_key,
         c.city, 
         c.country, 
         c.active, 
-        c.full_name,
-        r.rental_id, 
+        c.full_name, 
         r.amount, 
         r.rental_date,
 
@@ -30,6 +31,8 @@ WITH fact_customer_segment AS (
     FROM {{ ref("dim_customer_detail") }} c
     JOIN {{ ref("dim_rental_detail") }} r 
         ON r.customer_id = c.customer_id
+    JOIN {{ ref("dim_datetime") }} dt
+        ON dt.date = DATE(r.rental_date)
 )
 
 SELECT * FROM fact_customer_segment

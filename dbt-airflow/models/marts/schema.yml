@@ -11,11 +11,26 @@ models:
           - unique
           - not_null
   
+  - name: dim_datetime
+    description: "A starter dbt model"
+    columns:
+      - name: date_key
+        description: "The surrogate key for this table"
+        data_tests:
+          - unique
+          - not_null
+
+      - name: date
+        description: "The business key for this table"
+        data_tests:
+          - unique
+          - not_null
+
   - name: dim_rental_detail
     description: "A starter dbt model"
     columns:
       - name: rental_id
-        description: "The primary key for this table"
+        description: "The business key for this table"
         data_tests:
           - unique
           - not_null
@@ -24,7 +39,7 @@ models:
     description: "A starter dbt model"
     columns:
       - name: rental_id
-        description: "The primary key for this table"
+        description: "The business key for this table"
         data_tests:
           - unique
           - not_null

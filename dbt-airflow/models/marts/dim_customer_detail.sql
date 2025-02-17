@@ -13,4 +13,7 @@ WITH customer_detail AS (
         ON cd.address_id = c.address_id
 )
 
-SELECT * FROM customer_detail
+SELECT 
+    {{ dbt_utils.generate_surrogate_key(['customer_id']) }} AS customer_key,
+    *
+FROM customer_detail

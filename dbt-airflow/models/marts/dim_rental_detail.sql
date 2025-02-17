@@ -11,4 +11,7 @@ WITH rental_detail AS (
         ON p.rental_id = r.rental_id
 )
 
-SELECT * FROM rental_detail
+SELECT 
+    {{ dbt_utils.generate_surrogate_key(['rental_id']) }} AS rental_key,
+    * 
+FROM rental_detail
