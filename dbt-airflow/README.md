@@ -1,5 +1,6 @@
-# This stage will run transformations from streamming data which was ingested
-## Setup project before run
+# This stage will run transformations periodically by DBT and Airflow
+
+## Setup DBT project before run
 
 Install these packages by `dbt deps` command:
 ```yaml
