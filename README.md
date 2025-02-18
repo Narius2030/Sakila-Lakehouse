@@ -66,7 +66,8 @@ python3 stream_events.py
 
 To run data warehouse's transformations, just need trigger this DAG in Airflow's UI or it will automatically run daily at `23:00 PM`
 
-![image](https://github.com/user-attachments/assets/5e1957fe-4e6b-46d2-a148-885f66a6d883)
+![image](https://github.com/user-attachments/assets/50f9aff8-4823-4bb9-b83c-3539e22e6462)
+
 
 
 
