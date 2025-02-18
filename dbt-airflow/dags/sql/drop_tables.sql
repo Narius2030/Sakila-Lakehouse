@@ -1,0 +1,5 @@
+-- DROP TABLE IF EXISTS dim_date;
+-- DROP TABLE IF EXISTS customer_address_detail;
+-- DROP TABLE IF EXISTS dim_customer_detail;
+-- DROP TABLE IF EXISTS dim_rental_detail;
+-- DROP TABLE IF EXISTS fact_customer_segment;

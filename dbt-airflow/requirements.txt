@@ -1,5 +1,4 @@
-dbt-core
-dbt-trino
 pydantic
 python-dotenv
 pydantic-settings
+apache-airflow-providers-trino
