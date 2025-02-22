@@ -10,3 +10,12 @@ models:
         data_tests:
           - unique
           - not_null
+    
+  - name: customer_rental_detail
+    description: "A starter dbt model"
+    columns:
+      - name: customer_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
