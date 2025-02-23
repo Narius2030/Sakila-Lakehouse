@@ -68,6 +68,10 @@ To run data warehouse's transformations, just need trigger this DAG in Airflow's
 
 ![image](https://github.com/user-attachments/assets/50f9aff8-4823-4bb9-b83c-3539e22e6462)
 
+# Real-time dashboard for trend analysis
+
+![dashboard](https://github.com/user-attachments/assets/dd5e52ce-eb1b-48da-b70d-f5a3ec184703)
+
 
 
 
