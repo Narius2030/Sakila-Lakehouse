@@ -1,6 +1,6 @@
 # Introduction
 
-Developed a Lakehouse-based data pipeline using Sakila dataset to analyze movie sales and rentals. The lakehouse was designed according to `Delta` architecture
+Developed a Lakehouse-based data pipeline using Sakila dataset to analyze movie sale and rental trends. The lakehouse was designed according to `Delta` architecture
 
 - Extracted events in database by using CDC (Debezium), then published events to Kafka which ensures `scalable and fault-tolerant` message processing
 - Processed streaming event by Spark Streaming and writes to Delta Tables in MinIO, combining with Trino query engine to provide `real-time insights` via Superset dashboards
